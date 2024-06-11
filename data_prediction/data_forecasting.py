@@ -6,15 +6,15 @@ from data_prediction.prediction import predict_lgbm
 df_building = pd.read_excel("store/predict/train_data.xlsx")
 
 # predict energy and water using lgbm model by calling 'predict_lgbm' function
-df_lgbm =  # TODO: write your code here
+df_lgbm = predict_lgbm(df_building)
 
-output_file_path = 'store/output/clean_data_lgbm.xlsx'
 # save the LightGBM predictions to an Excel file without the index
-# TODO: write your code here
+output_file_path = 'store/output/clean_data_lgbm.xlsx'
+df_lgbm.to_excel(output_file_path, sheet_name="Summary", index=False)
 
-# predict energy and water using chronos by calling 'predict_chronos' function
-df_chronos = # TODO: write your code here
+# predict energy and water using chronos
+df_chronos = predict_chronos(df_building)
 
-output_file_path = 'store/output/clean_data_chronos.xlsx'
 # save the Chronos predictions to an Excel file without the index
-# TODO: write your code here
+output_file_path = 'store/output/clean_data_chronos.xlsx'
+df_chronos.to_excel(output_file_path, sheet_name="Summary", index=False)

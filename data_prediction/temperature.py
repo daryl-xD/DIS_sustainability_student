@@ -8,22 +8,21 @@ data = []
 for year in range(2018, 2025):
     # iterate over the months from January (1) to December (12)
     for month in range(1, 13):
-
         # stop after April 2024
-        # TODO: write your code here
-
+        if year == 2024 and month > 4:
+            break
         # format the sheet name as "YYYYMM"
-        # TODO: write your code here
+        sheet_name = f"{year}{month:02d}"
 
         try:
             # read the Excel file with each sheet_name (from 201801 to 202404) into a DataFrame
             df_weather = pd.read_excel("store/input/Weather_Data_Newton_2018_to_2024.xlsx", sheet_name=sheet_name)
 
             # convert the 'Mean Temperature (°C)' column to numeric, coercing errors to NaN
-            df_weather['Mean Temperature (°C)'] = # TODO: write your code here
+            df_weather['Mean Temperature (°C)'] = pd.to_numeric(df_weather['Mean Temperature (°C)'], errors='coerce')
 
             # calculate the mean temperature for the current sheet (current month)
-            mean_temp = # TODO: write your code here
+            mean_temp = df_weather['Mean Temperature (°C)'].mean()
 
             # append the date, and mean temperature to the list
             data.append({'date': f"{year}-{month:02d}", 'temperature': mean_temp})
@@ -33,7 +32,7 @@ for year in range(2018, 2025):
             print(f"Failed to process {sheet_name}: {e}")
 
 # convert the list of dictionaries to a DataFrame
-df_temperature = # TODO: write your code here
+df_temperature = pd.DataFrame(data)
 
 # save the dataframe and export it in excel file with specified path 
 output_file_path = 'store/predict/temperature_data.xlsx'

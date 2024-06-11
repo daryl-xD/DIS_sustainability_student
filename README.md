@@ -1,18 +1,20 @@
-# Module 2: Data Forecasting
+# Module 3: Data Visualization
 
 ## Overview
-This module explores time series forecasting using LightGBM and AWS Chronos, focusing on training, deploying, and leveraging these tools to achieve high prediction accuracy in handling time-sensitive data.
+This module delves into the fundamentals of data visualization, focusing on using Streamlit to create interactive charts and FastAPI to handle data retrieval. 
+Students will learn to build dynamic visual interfaces and APIs that can fetch and display data efficiently.
 
 ## Workflow
-### Step 1: Calculate the Mean Temperature Data
-First, calculate the mean temperature for each month from the weather dataset. This will be one of the features for the model.
-### Step 2: Prepare the Training Data
-Next, prepare training data by adding the calculated mean temperature column to original dataset.
-### Step 3: Train LightGBM Model
-Train the LightGBM model using the prepared training data.
-### Step 4: Predict data with LightGBM and AWS Chronos
-Use the trained LightGBM model and AWS Chronos to predict the data for energy and water.
+### Step 1: Set Up FastAPI for Data Retrieval
+First, set up FastAPI to create endpoints for data retrieval.
+### Step 2: Set Up Streamlit for Data Visualization
+Next, set up Streamlit to create interactive charts.
+### Step 3: Integrate Streamlit with FastAPI
+Ensure that Streamlit fetches data from the FastAPI endpoint and updates the visualizations accordingly.
+### Step 4: Add component or feature 
+Enhance the visualizations with more interactivity and customization using Streamlit's built-in features.
 
 ## What You Will Learn
-- **Model Training**: Learn to utilize the LightGBM framework for time series forecasting. The process involves understanding feature selection and model tuning to build a forecasting model.
-- **Data Prediction**: Use the trained LightGBM model alongside AWS Chronos to predict future events. Learn to preprocess data, configure and interpret outputs from these tools and apply them to predict data.
+- **Data Visualizations**: Learn to create charts with Matplotlib and enhance user interactivity with Streamlit
+- **Data Handling**: Learn to retrieve data using FastAPI endpoints which can be seamlessly integrated into Streamlit applications
+- **Integration**: Learn to connect Streamlit with FastAPI to enable real-time data updates and create responsive visualizations

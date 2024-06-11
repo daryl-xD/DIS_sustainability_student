@@ -17,8 +17,8 @@ def train_model(df_building, train_date, val_date, target, model_path):
     # define masks for training, testing, and validation sets
     # rows with dates before 'train_date' will be included in the training set
     # rows with dates on or after 'train_date' will be included in the testing set
-    training_mask = # TODO: write your code here 
-    testing_mask = # TODO: write your code here 
+    training_mask = df_building["date"] < train_date
+    testing_mask = df_building["date"] >= train_date
     val_mask = df_building["date"] >= val_date
 
     # separate the DataFrame into training, testing, and validation sets
@@ -26,18 +26,17 @@ def train_model(df_building, train_date, val_date, target, model_path):
     testing_data = df_building[testing_mask]
     val_data = df_building[val_mask]
 
-    # define the feature columns for the model 
-    # each of the feature must in the same datatype 
+    # define the feature columns for the model
     # the columns in the dataset that will be used as input features for the model
     features = ["month", "year", "working_day", "temperature", "code_number"]
 
     # extract the input features and the target variable for the training set
-    X_train = # TODO: write your code here 
-    y_train = # TODO: write your code here 
+    X_train = training_data[features]
+    y_train = training_data[target]
 
     # extract the input features and the target variable for the testing set
-    X_test = # TODO: write your code here 
-    y_test = # TODO: write your code here 
+    X_test = testing_data[features]
+    y_test = testing_data[target]
 
     # LightGBM parameters for training the model
     params = {
@@ -61,8 +60,8 @@ def train_model(df_building, train_date, val_date, target, model_path):
     # set the number of rounds for training
     num_round = 5
 
-    # train the model using the specified parameters, training data, number of rounds and use test_data as valid_sets
-    bst = # TODO: write your code here 
+    # train the model using the specified parameters, training data, and number of rounds
+    bst = lgb.train(params, train_data, num_round, valid_sets=[test_data])
 
     # save the trained model to the specified path
     # use pickle to save the trained model object to a file
