@@ -14,7 +14,7 @@ def train_model(df_building, train_date, val_date, target, model_path):
     Return: bst: trained LightGBM model.
     """
 
-    # Define masks for training, testing, and validation sets
+    # define masks for training, testing, and validation sets
     # rows with dates before 'train_date' will be included in the training set
     # rows with dates on or after 'train_date' will be included in the testing set
     training_mask = # TODO: write your code here 
@@ -26,7 +26,8 @@ def train_model(df_building, train_date, val_date, target, model_path):
     testing_data = df_building[testing_mask]
     val_data = df_building[val_mask]
 
-    # define the feature columns for the model
+    # define the feature columns for the model 
+    # each of the feature must in the same datatype 
     # the columns in the dataset that will be used as input features for the model
     features = ["month", "year", "working_day", "temperature", "code_number"]
 
