@@ -57,7 +57,10 @@ for ___  , ___ in ___: # TODO: complete the code
     # use the function 'calculate_working_days' which import from utility 
     df_building = # TODO: complete the code
 
-    # create a codes column to store the sheetname
+    # Create columns ('codes', 'code', 'gfa') for df_building to store the necessary data from data_building
+    # Assign the 'tab' value to the 'codes' column
+    # Assign the current 'codes' key to the 'code' column
+    # Assign the 'gfa' value to the 'gfa' column
     # TODO: write your code here
 
     # store df_building to dataframe_building with the respective sheetname
