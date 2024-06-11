@@ -7,7 +7,7 @@ def get_model_data(model):
     :return: dict of the dataset 
     """
     # initialize an empty DataFrame to store the combined data
-    df_full = pd.DataFrame()
+    df_full = # TODO: write your code here
 
     # load the original dataset from an Excel file
     df = pd.read_excel("store/predict/clean_data.xlsx")
@@ -18,15 +18,22 @@ def get_model_data(model):
     elif model == "LGBM":
         df_predict = pd.read_excel("store/output/clean_data_lgbm.xlsx")
     
-    unique_codes = list(set(df_predict.code.to_list()))
+    # get a list of unique codes from the predicted dataset
+    unique_codes = # TODO: write your code here 
 
     # combine the original data with predicted data for each code 
     for code in unique_codes:
-        df_code = df[df["code"] == code]
-        df_pred = df_predict[df_predict["code"] == code]
-        # combine the row from both datasets
+    
+        # filter the original data (df) for the current code
+        df_code = # TODO: write your code here
+
+        # filter the predicted data (df_predict) for the current code
+        df_pred = # TODO: write your code here
+
+        # combine the row from both datasets. ignore index to avoid duplicate indices
         df_combine= pd.concat([df_code, df_pred],ignore_index=True)
-        # Append the combined data to df_full
-        df_full = pd.concat([df_full, df_combine], ignore_index=True)
+
+        # Append the combined data to df_full. ignore index to avoid duplicate indices
+        df_full = # TODO: write your code here
     
     return df_full.to_dict(orient='records')
