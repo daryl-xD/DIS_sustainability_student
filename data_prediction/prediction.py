@@ -24,23 +24,20 @@ def predict_lgbm(df_building, time_now: int = 1685548800, tz_str: str = "Asia/Si
     Return: dataframe: dataframe that contains the predicted energy and water for future dates
     """
     # convert the UNIX timestamp to a datetime object with the specified timezone using the 'unix_to_datetime' function
-    time_now = unix_to_datetime(time_now, tz_str)
+    time_now = # TODO: write your code here 
 
     # Determine the prediction end date 18 months from the current time
-    max_possible_date = time_now + relativedelta(months=18)
+    max_possible_date = # TODO: write your code here 
 
     # If the month of 'max_possible_date' is December, set the 'estimation_end' to December 31 of the same year
     # Otherwise set it to December 31 of the previous year to ensure the prediction period ends at the end of a year
-    if max_possible_date.month == 12:
-        estimation_end = max_possible_date.replace(day=31).date()
-    else:
-        estimation_end = max_possible_date.replace(year=max_possible_date.year - 1).replace(month=12).replace(day=31).date()
+    # TODO: write your code here 
 
-    # Initialize an empty DataFrame for future data
+    # Initialize an empty dataframe for future data
     resp_df = pd.DataFrame()
 
-    # Get unique codes from the 'code_number' column of df_buidling 
-    unique_codes = df_building['code_number'].unique()
+    # Get unique codes from the 'code_number' column of df_buidling  
+    unique_codes = # TODO: write your code here 
 
     # Set a global random seed for consistency across function calls
     # make sure the temperature column has distinct data for each row 
@@ -50,15 +47,14 @@ def predict_lgbm(df_building, time_now: int = 1685548800, tz_str: str = "Asia/Si
     for code in unique_codes:
 
         # Filter the historical data ('df_building') for the current code.
-        temp_hist = df_building[df_building['code_number'] == code]
+        temp_hist = # TODO: write your code here 
 
-        # Check if the filtered DataFrame is empty
+        # Check if the filtered dataframe is empty
         if temp_hist.empty:
             continue
         
-        
         # get the last entry date by extracting the last row of 'date' column from 'temp_hist'
-        entry_last = temp_hist['date'].iloc[-1]
+        entry_last = # TODO: write your code here 
 
         # create a list of future dates starting from the day after the last entry date and end at the 'estimation_end'
         future_dates = pd.date_range(start=entry_last + pd.DateOffset(days=1), end=estimation_end, freq='MS')
@@ -79,18 +75,18 @@ def predict_lgbm(df_building, time_now: int = 1685548800, tz_str: str = "Asia/Si
         })
 
         # Get the relevant details ('codes', 'code' and 'gfa') from the last historical entry
-        temp_df['codes'] = temp_hist['codes'].iloc[-1]
-        temp_df['code'] = temp_hist['code'].iloc[-1]
-        temp_df['gfa'] = temp_hist['gfa'].iloc[-1]
+        temp_df['codes'] = # TODO: write your code here 
+        temp_df['code'] = # TODO: write your code here 
+        temp_df['gfa'] = # TODO: write your code here 
 
-        # extract the value of 'month' and 'year' from 'date' column
-        temp_df['month'] = temp_df['date'].dt.month
-        temp_df['year'] = temp_df['date'].dt.year
+        # extract the value of 'month' and 'year' from 'date' column 
+        temp_df['month'] = # TODO: write your code here 
+        temp_df['year'] = # TODO: write your code here 
 
         temp_df.reset_index(drop=True, inplace=True)
 
         # Calculate working days for each 'date' by using the function 'calculate_working_days'
-        temp_df = calculate_working_days(temp_df)
+        temp_df = # TODO: write your code here 
 
         # Concatenate the temp_df to the resp_df
         resp_df = pd.concat([resp_df, temp_df])
@@ -101,16 +97,15 @@ def predict_lgbm(df_building, time_now: int = 1685548800, tz_str: str = "Asia/Si
     X_future = resp_df[["month", "year", "working_day", "temperature",  "code_number"]]
 
     # Load the pre-trained LightGBM models for energy and water
-    energy = pickle.load(open("model/lgbm_energy_model.pkl", 'rb'))
-    water = pickle.load(open("model/lgbm_water_model.pkl", 'rb'))
+    energy = pickle.load(open("store/model/lgbm_energy_model.pkl", 'rb'))
+    water = pickle.load(open("store/model/lgbm_water_model.pkl", 'rb'))
 
     # Predict 'energy' and 'water' for the future dates using the loaded model with the features selected
-    energy_pred = energy.predict(X_future)
-    water_pred = water.predict(X_future)
+    energy_pred = # TODO: write your code here )
+    water_pred = # TODO: write your code here 
     
-    # update 'energy' and 'water' column with the predicted values
-    resp_df['energy'] = energy_pred
-    resp_df['water'] = water_pred
+    # update 'energy' and 'water' column of 'resp_df' with the predicted values
+    # TODO: write your code here 
 
     # drop unnecessary columns to clean up the DataFrame
     resp_df.drop(columns=['temperature', 'month', 'year', 'code_number'], inplace=True)
@@ -144,7 +139,7 @@ def predict_chronos(df_building, time_now: int = 1685548800, tz_str: str = "Asia
     # Initialize an empty DataFrame to store predicted data
     resp_df = pd.DataFrame()
 
-    # Get unique codes from the 'code_number' column of df_buidling 
+    # Get unique codes from the 'code_number' column of df_buidling  
     unique_codes = df_building['code_number'].unique()
 
     # iterate through each building code to get the predicted data for energy and water
@@ -156,30 +151,23 @@ def predict_chronos(df_building, time_now: int = 1685548800, tz_str: str = "Asia
         # Check if the filtered DataFrame is empty
         if temp_hist.empty:
             continue
-        
-         # get the last entry date by extracting the last row of 'date' column from 'temp_hist'
-        entry_last = temp_hist['date'].iloc[-1]
+
+        # get the last entry date by extracting the last row of 'date' column from 'temp_hist'
+        entry_last = # TODO: write your code here 
 
         # Set the prediction horizon based on the month difference between the last entry date and the end of estimation.
         # If the 'entry_last' and the 'estimation_end' are one year apart in December, set horizon to 12 months.
-        if relativedelta(estimation_end, entry_last).months == 0 and relativedelta(estimation_end, entry_last).years == 1:
-            horizon = 12
-        else:
-            horizon = relativedelta(estimation_end, entry_last).months
+        # TODO: write your code here 
 
         # create an empty dict to store the relevant data 
         temp_dict = {"date": [], "energy": [], "water": [], "working_day": []}
 
         # iterate over each row in the temp_hist DataFrame
         # append the 'date', 'energy', 'water' and working_day' value from each row of temp_hist into temp_dict
-        for _, row in temp_hist.iterrows():
-            temp_dict["date"].append(row['date'])
-            temp_dict["energy"].append(row['energy'])
-            temp_dict["water"].append(row['water'])
-            temp_dict["working_day"].append(row['working_day'])
+        # TODO: write your code here 
 
         # Convert the dict to DataFrame for model prediction
-        df_pred = pd.DataFrame(temp_dict)
+        df_pred = # TODO: write your code here 
 
         # calculate the prediction for energy and water using chronos foundation model from AWS
         low_energy, mid_energy, high_energy = chronos_forecast(model=pipelines, data=df_pred,horizon=horizon,
@@ -199,14 +187,17 @@ def predict_chronos(df_building, time_now: int = 1685548800, tz_str: str = "Asia
             # - water: Value from the low_water list
             # - working_day: Initialized to 0, will calculate the working days later
             # - code_number: Use the provided code
-            row_data = {"date": (df_pred.iloc[last_row_index]["date"] +
-                                    timedelta(days=32)).replace(day=1),
-                        "energy": low_energy[i], "water": low_water[i],
-                        'working_day': 0,
-                        "code_number": code}
-            # Convert the items of row data into a DataFrame
-            temp_df = pd.DataFrame(row_data.items())
+            row_data = {
+                "date": (df_pred.iloc[last_row_index]["date"] + timedelta(days=32)).replace(day=1),
+                "energy": low_energy[i],
+                "water": low_water[i],
+                "working_day": 0,
+                "code_number": code
+            }
 
+            # Convert the items of row data into a DataFrame
+            temp_df = # TODO: write your code here 
+            
             # Transpose the DataFrame to have columns as keys and rows as values
             temp_df = temp_df.T
 
@@ -215,31 +206,33 @@ def predict_chronos(df_building, time_now: int = 1685548800, tz_str: str = "Asia
             temp_df = temp_df.drop(index=0)
 
             # Add necessary data from the last row of temp_hist DataFrame
-            temp_df['codes'] = temp_hist['codes'].iloc[-1]
-            temp_df['code'] = temp_hist['code'].iloc[-1]
-            temp_df['gfa'] = temp_hist['gfa'].iloc[-1]
-            
+            temp_df['codes'] = # TODO: write your code here 
+            temp_df['code'] = # TODO: write your code here 
+            temp_df['gfa'] = # TODO: write your code here 
+
             # Concatenate the temp_df to the resp_df
-            resp_df = pd.concat(([resp_df, temp_df]))
+            resp_df = # TODO: write your code here 
 
             # Concatenate the temp_df to the df_pred DataFrame to keep track of the predictions
-            df_pred = pd.concat([df_pred, temp_df])
+            df_pred = # TODO: write your code here 
+
+            # Reset the index of df_pred to ensure it starts from 0 
             df_pred.reset_index(inplace=True, drop=True)
 
-            # Increment the index for the last row 
+            # Increment the index for the last row
             last_row_index += 1
 
     # Reset the index of the 'resp_df 'to ensure it starts from 0
-    resp_df.reset_index(drop=True, inplace=True)
+    # TODO: write your code here 
 
     # calculate the working days of resp_df for each month using 'calculate_working_day' function
-    resp_df = calculate_working_days(resp_df)
+    resp_df = # TODO: write your code here 
 
     # Remove the unecessary column
     resp_df.drop(columns=['code_number'], inplace=True)
 
     # calculate KPI with the predicted data using 'calculate_kpi' function 
-    final_df = calculate_kpi(resp_df)
+    final_df = # TODO: write your code here 
     
     return final_df
 
