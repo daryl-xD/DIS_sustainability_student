@@ -9,28 +9,18 @@ df_basic = pd.read_excel("store/input/basic_data.xlsx")
 df_basic.set_index("tab", inplace=True)
 data_basic = df_basic.to_dict(orient="index")
 
-# read the "power" sheet from the Excel file and load it into df_intensity dataframe
 df_intensity = pd.read_excel("store/input/basic_data.xlsx", sheet_name='power')
-
-# set the "year" column as the index for df_intensity to make it easier to access data by year.
-# TODO: write your code here
-
-# convert the df_intensity DataFrame to a dictionary with the "year" values as keys.
-data_intensity = # TODO: write your code here
+df_intensity.set_index("year", inplace=True)
+data_intensity = df_intensity.to_dict(orient='index')
 
 # To update the df_building by adding "EUI", "WEI" and "carbon_index" column
-# iterate through each row of df_building to calculate the value of each kpi
+# iterate through the row of df_building to calculate the value of each kpi
 # insert the calculated value at the specified index row by row  
 for index, row in df_building.iterrows():
+    code = row['codes']
+    data_building = data_basic.get(code)
 
-    # get the building code for the current row
-    # TODO: write your code here
-
-    # get the corresponding data of the code in the data_basic
-    data_building = # TODO: write your code here
-
-    # check if the data exists
-    # use the respective data to calculate EUI, WEI and carbon emissions
+    # check if the "codes" in df_building matches the "tab" in data_basic to get the "gfa" value
     if data_building:
         # Calculate EUI
         df_building.at[index, 'EUI'] = row['energy'] / data_building['gfa']
@@ -43,12 +33,11 @@ for index, row in df_building.iterrows():
         df_building.at[index, 'WEI_Area'] = row['water'] / data_building['gfa']
         df_building.at[index, 'WEI_People'] = row['water'] * 1000 / (estimated_staff + 0.25 * estimated_visitors) / row['working_day']
 
-        # calculate carbon energy and water by using the 'calculate_carbon' function import from utility
-        # TODO: write your code here for carbon energy
-        # TODO: write your code here for carbon water
+        # Calculate carbon emissions
+        df_building.at[index, 'carbon_energy'] = calculate_carbon(row, 'energy', data_intensity)
+        df_building.at[index, 'carbon_water'] = calculate_carbon(row, 'water', data_intensity)
         df_building.at[index, 'carbon_index'] = (df_building.at[index, 'carbon_water'] + df_building.at[index, 'carbon_energy']) / data_building['gfa'] / (estimated_staff 
                                                                                                                                                            + 0.25 * estimated_visitors) * 10000
-        
+
 output_file_path = 'store/output/clean_data.xlsx'
-# Save the dataframe to an Excel file with specified path 
-# TODO: write your code here
+df_building.to_excel(output_file_path, sheet_name="Summary", index=False)
