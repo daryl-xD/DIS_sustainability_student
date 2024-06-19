@@ -6,9 +6,13 @@ from tools.code_dict import icon_dict, kpi_dict
 import time
 import matplotlib.pyplot as plt
 import random
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # define base URL for API endpoints
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = os.environ.get('BASE_URL')
 
 
 def st_get_all_building():
