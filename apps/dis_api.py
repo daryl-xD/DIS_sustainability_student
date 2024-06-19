@@ -17,9 +17,10 @@ def get_all_building_name():
     :return: dict = {"name_list": list, "code_list": list}
     """
     df = pd.read_excel("store/input/basic_data.xlsx")
-    name_list = df.name.to_list()
-    code_list = df.code.to_list()
+    name_list = 
+    code_list = 
     return {"name_list": name_list, "code_list": code_list}
+
 
 @router.get('/buildingData', response_model=BuildingDataResponse)
 def get_building_data(payload: GeneralInput):
@@ -35,14 +36,14 @@ def get_building_data(payload: GeneralInput):
 
     # the box is a list of lat long, but it is saved as string because it comes from Excel.
     # use json to load it into a list
-    data_dict["box"] = json.loads(data_dict["box"])
+    data_dict["box"] = 
 
     # some of the carkpark is str and some of it is int, this is to standardize
-    data_dict["carpark"] = str(data_dict["carpark"])
+    data_dict["carpark"] = 
 
     # get the dictionary into the response schema
     resp = BuildingDataResponse(**dict(data_dict))
-    print(resp)
+ 
     return resp
 
 
@@ -87,20 +88,20 @@ def get_monitoring_data(payload: GeneralInput):
     """
     # get the dates of the years we are in, and calculate the first and last days of the year
     time_now = unix_to_datetime(payload.time_now, payload.tz_str)
-    year_start = time_now.replace(day=1).replace(month=1).strftime('%Y-%m-%d')
-    year_end = time_now.replace(month=12).replace(day=31).strftime('%Y-%m-%d')
+    year_start = 
+    year_end = 
 
     # get the data of the building that we want to see
     df = pd.DataFrame(get_model_data(payload.model))
     df_code = df[df["code"] == payload.code]
     
     # set the month as index, so we could use date to select the time range
-    df_code.set_index("date", inplace=True, drop=True)
-    df_chart = df_code.loc[year_start:year_end]
+    df_code = 
+    df_chart = 
     df_chart.reset_index(inplace=True)
 
     # convert datetime object to date only to display on chart
-    df_chart["date"] = pd.to_datetime(df_chart["date"]).dt.floor('D')
+    df_chart["date"] = 
 
     # this is the x-axis data (date)
     date_list = df_chart["date"].to_list()
