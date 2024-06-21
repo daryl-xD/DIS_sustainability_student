@@ -47,4 +47,22 @@ class Dice:
         df_sim = pd.DataFrame({"rolls": sim_rolls})
         return df_sim
 
-          
+st.write("This is a ROLL DICE simulation")
+
+col1, col2 = st.columns([1,1])
+
+with col1:
+    side_options = [6, 10, 12, 20]
+    num_sides = st.radio("Number of sides:", side_options)
+    num_dice = st.slider("Number of dice:", 1, 10, value=2)
+    num_rolls_sim = st.slider("Number of rolls in simulation",
+            1_000, 100_000, value=1_000, step=1_000)
+
+with col2:
+    dice = Dice(num_sides, num_dice)  # Create a Dice instance with 6 sides and 1 die
+    simulation_result = dice.simulate_rolls(num_rolls_sim)  # Simulate 1000 rolls
+
+    fig, ax = plt.subplots()
+    ax.hist(simulation_result, bins=20)
+
+    st.pyplot(fig)
